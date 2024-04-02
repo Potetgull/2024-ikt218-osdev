@@ -14,7 +14,7 @@ setGdt:
    MOV   FS, AX
    MOV   GS, AX
    MOV   SS, AX
-   JMP   0x08:.reload_cs
+   JMP   0x08:.reload_cs ;Must jump in order to reset the cs register. It does not react any other way.
 
 .reload_cs
  RET

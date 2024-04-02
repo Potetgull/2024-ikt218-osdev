@@ -7,6 +7,7 @@ struct gdt_entry gdt[GDT_ENTRIES];
 struct gdt_ptr gdt_ptr;
 
 void init_gdt() {
+
   // Set the GDT limit
   gdt_ptr.limit = sizeof(struct gdt_entry) * GDT_ENTRIES - 1;
   gdt_ptr.base = (uint32_t) &gdt;
@@ -19,7 +20,7 @@ void init_gdt() {
   gdt_set_gate(4, 0, 0xFFFFFFFF, 0xF2, 0xCF); // User mode data segment
 
 	
-	// Flush GDT pointer
+	// Flush GDT pointer. Setter alle registerene til 0x10.
 	setGdt((uint32_t)&gdt_ptr);
 }
 
