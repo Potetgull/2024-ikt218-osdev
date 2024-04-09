@@ -20,7 +20,7 @@ void init_gdt() {
   gdt_set_gate(4, 0, 0xFFFFFFFF, 0xF2, 0xCF); // User mode data segment
 
 	
-	// Flush GDT pointer. Setter alle registerene til 0x10.
+	// Flush GDT pointer. Setter alle registerene til 0x10. (Data segment)
 	setGdt((uint32_t)&gdt_ptr);
 }
 
