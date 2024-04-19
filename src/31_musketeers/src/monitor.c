@@ -1,6 +1,9 @@
 #include "monitor.h"
+#include "libc/stdint.h"
 
-
+volatile uint16_t cursor_x = 0;
+volatile uint16_t cursor_y = 0;
+uint16_t *video_memory = (volatile char)0xB8000;
 
 void monitor_put(char c)
 {

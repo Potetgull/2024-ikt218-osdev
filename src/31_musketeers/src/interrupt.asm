@@ -22,7 +22,6 @@ isr0:
     jmp isr_common_stub
 %endmacro
 
-ISR_NOERRCODE 0
 ISR_NOERRCODE 1
 ISR_NOERRCODE 2
 ISR_NOERRCODE 3

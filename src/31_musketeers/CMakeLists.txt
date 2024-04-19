@@ -67,6 +67,7 @@ add_executable(uiaos-kernel
 	src/descriptor_tables.c
 	src/interrupt.asm
 	src/monitor.c
+	src/common.c
 )
 
 # Include directories for the kernel target

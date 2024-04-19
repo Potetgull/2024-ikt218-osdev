@@ -3,9 +3,9 @@
 
 #include "libc/stdint.h"
 
-volatile uint16_t cursor_x = 0;
-volatile uint16_t cursor_y = 0;
-uint16_t *video_memory = (volatile char)0xB8000;
+extern volatile uint16_t cursor_x;
+extern volatile uint16_t cursor_y;
+extern uint16_t *video_memory;
 
 // Write a single character out to the screen.
 void monitor_put(char c);
