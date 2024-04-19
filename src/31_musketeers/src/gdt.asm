@@ -1,4 +1,5 @@
 global setGdt
+GLOBAL idt_flush    ; Allows the C code to call idt_flush().
 
 gdtr DW 0 ; For limit storage
      DD 0 ; For base storage
@@ -18,3 +19,9 @@ setGdt:
 
 .reload_cs
  RET
+
+
+idt_flush:
+   mov eax, [esp+4]  ; Get the pointer to the IDT, passed as a parameter.
+   lidt [eax]        ; Load the IDT pointer.
+   ret
