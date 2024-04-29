@@ -1,6 +1,6 @@
 #include <gdt.h>
 #include <descriptor_tables.h>
-#include <libc/string.h>
+#include <common.h>
 
 extern void idt_flush(uint32_t);
 static void init_idt();
