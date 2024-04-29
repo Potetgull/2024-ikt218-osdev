@@ -2,7 +2,6 @@
 #define MONITOR_H
 
 #include "libc/stdint.h"
-
 extern volatile uint16_t cursor_x;
 extern volatile uint16_t cursor_y;
 extern uint16_t *video_memory;
@@ -22,7 +21,7 @@ void monitor_write_dec(uint32_t n);
 
 int32_t findstrlength(char *str);
 
-static void move_cursor();
+void move_cursor();
 
-static void scroll();
+void scroll();
 #endif // MONITOR_H

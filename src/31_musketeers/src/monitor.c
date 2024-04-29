@@ -1,14 +1,15 @@
 #include "monitor.h"
+#include "common.h"
 #include "libc/stdint.h"
 
 volatile uint16_t cursor_x = 0;
 volatile uint16_t cursor_y = 0;
-uint16_t *video_memory = (volatile char)0xB8000;
+uint16_t *video_memory = (uint16_t*)0xB8000;
+
 
 void monitor_put(char c)
-{
-   // The background colour is black (0), the foreground is white (15).
-   uint8_t backColour = 0;
+{   
+    uint8_t backColour = 0;
    uint8_t foreColour = 15;
 
    // The attribute byte is made up of two nibbles - the lower being the
@@ -89,7 +90,7 @@ void monitor_write(char *c)
    int i = 0;
    while (c[i])
    {
-       monitor_put(c[i++]);
+        monitor_put(c[i++]);
    }
 }
 
@@ -134,7 +135,7 @@ int32_t findstrlength(char *str){
     return strlen;
 }
 
-static void move_cursor()
+void move_cursor()
 {
    // The screen is 80 characters wide...
    uint16_t cursorLocation = cursor_y * 80 + cursor_x;
@@ -144,7 +145,7 @@ static void move_cursor()
    outb(0x3D5, cursorLocation);      // Send the low cursor byte.
 }
 
-static void scroll()
+void scroll()
 {
 
    // Get a space character with the default colour attributes.
