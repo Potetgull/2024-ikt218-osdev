@@ -25,8 +25,12 @@ int main(uint32_t magic, struct multiboot_info* mb_info_addr) {
     monitor_clear();
     monitor_write("Hello, world!");
 
+    asm volatile ("int $0x0");
+    asm volatile ("int $0x1");
+    asm volatile ("int $0x2");
     asm volatile ("int $0x3");
-    //asm volatile ("int $0x4");
+    asm volatile ("int $0x4");
+    asm volatile ("int $0x5");
     // Call cpp kernel_main (defined in kernel.cpp)
     return kernel_main();
 }

@@ -117,7 +117,7 @@ void monitor_write_dec(uint32_t n)
 
     char strret[strlen];
 
-    for(int j = strlen; j>0 ; j--){
+    for(int j = strlen-1; j>=0 ; j--){
         for(uint32_t p = 0; p<strlen; p++){
             strret[p]=str[j];
         }
