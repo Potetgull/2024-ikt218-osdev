@@ -88,7 +88,7 @@ void monitor_clear()
 void monitor_write(char *c)
 {
    int i = 0;
-   while (c[i])
+   while (c[i] != '\0')
    {
         monitor_put(c[i++]);
    }
@@ -116,6 +116,8 @@ void monitor_write_dec(uint32_t n)
     uint32_t strlen = findstrlength(str);
 
     char strret[strlen];
+
+    memset(strret, 0, strlen+1);
 
     for(int j = strlen-1; j>=0 ; j--){
         for(uint32_t p = 0; p<strlen; p++){

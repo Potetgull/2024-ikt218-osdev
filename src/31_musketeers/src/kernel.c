@@ -25,6 +25,8 @@ int main(uint32_t magic, struct multiboot_info* mb_info_addr) {
     monitor_clear();
     monitor_write("Hello, world!");
 
+    init_timer(50); // Initialise timer to 50Hz
+
     asm volatile ("int $0x0");
     asm volatile ("int $0x1");
     asm volatile ("int $0x2");
