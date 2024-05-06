@@ -4,7 +4,9 @@
 #include <multiboot2.h>
 #include <descriptor_tables.h>
 #include <monitor.h>
-
+#include <timer.h>
+#include "isr.h"
+#include "input.h"
 
 
 struct multiboot_info {
@@ -17,6 +19,16 @@ struct multiboot_info {
 
 int kernel_main();
 
+void keyboard_handler(registers_t regs){
+            // Read from keyboard
+        unsigned char scan_code = inb(0x60);
+        char f = scancode_to_ascii(&scan_code);
+        
+        monitor_write(&f);
+
+        // Disable
+        asm volatile("cli");
+}
 
 int main(uint32_t magic, struct multiboot_info* mb_info_addr) {
     
@@ -24,8 +36,9 @@ int main(uint32_t magic, struct multiboot_info* mb_info_addr) {
 
     monitor_clear();
     monitor_write("Hello, world!");
+    asm volatile("sti");
 
-    init_timer(50); // Initialise timer to 50Hz
+    init_timer(1000); // Initialise timer to 50Hz
 
     asm volatile ("int $0x0");
     asm volatile ("int $0x1");
@@ -33,6 +46,10 @@ int main(uint32_t magic, struct multiboot_info* mb_info_addr) {
     asm volatile ("int $0x3");
     asm volatile ("int $0x4");
     asm volatile ("int $0x5");
+    register_irq_handler(IRQ1, keyboard_handler, NULL);
+
+
     // Call cpp kernel_main (defined in kernel.cpp)
     return kernel_main();
 }
+

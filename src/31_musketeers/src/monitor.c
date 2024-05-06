@@ -104,6 +104,7 @@ void monitor_write_dec(uint32_t n)
     uint32_t temp = n;
     char str[64];
     int i=0;
+    memset(str, 0, 64);
 
     do    
     {
@@ -115,15 +116,15 @@ void monitor_write_dec(uint32_t n)
 
     uint32_t strlen = findstrlength(str);
 
-    char strret[strlen];
+    char strret[strlen+1];
 
     memset(strret, 0, strlen+1);
+    strret[strlen+1] = '\0';
 
     for(int j = strlen-1; j>=0 ; j--){
-        for(uint32_t p = 0; p<strlen; p++){
-            strret[p]=str[j];
-        }
+        strret[strlen-1-j]=str[j];
     }
+    strret[strlen] = '\0';
 
     monitor_write(strret);
 }

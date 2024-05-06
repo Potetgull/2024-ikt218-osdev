@@ -29,5 +29,21 @@ typedef struct registers
    uint32_t eip, cs, eflags, useresp, ss; // Pushed by the processor automatically.
 } registers_t;
 
-typedef void (*isr_t)(registers_t);
-void register_interrupt_handler(uint8_t n, isr_t handler);
+typedef void (*isr_t)(registers_t*, void*);
+
+// Structure to hold information about an interrupt handler
+
+struct int_handler_t {
+  int num;
+  isr_t handler;
+  void *data;
+};
+
+// Define an interrupt handler
+void register_irq_handler(int irq, isr_t handler, void* ctx);
+void register_interrupt_handler(uint8_t n, isr_t handler, void*);
+
+void init_irq();
+
+static struct int_handler_t int_handlers[256];
+static struct int_handler_t irq_handlers[256];

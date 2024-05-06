@@ -1,6 +1,7 @@
 #include "timer.h"
 #include "isr.h"
 #include "monitor.h"
+#include "libc/stddef.h"
 
 uint32_t tick = 0;
 
@@ -15,12 +16,12 @@ static void timer_callback(registers_t regs)
 void init_timer(uint32_t frequency)
 {
    // Firstly, register our timer callback.
-   register_interrupt_handler(IRQ0, &timer_callback);
+   register_irq_handler(IRQ0, timer_callback, NULL);
 
    // The value we send to the PIT is the value to divide it's input clock
    // (1193180 Hz) by, to get our required frequency. Important to note is
    // that the divisor must be small enough to fit into 16-bits.
-   uint32_t divisor = 1193180 / frequency;
+   uint32_t divisor = (uint8_t)1193180 / frequency;
 
    // Send the command byte.
    outb(0x43, 0x36);
@@ -32,4 +33,16 @@ void init_timer(uint32_t frequency)
    // Send the frequency divisor.
    outb(0x40, l);
    outb(0x40, h);
+}
+
+
+void sleep_busy(uint32_t milliseconds){
+    uint32_t start_tick = tick;
+    uint32_t ticks_to_wait = milliseconds * TICKS_PER_MS;
+    uint32_t elapsed_ticks = 0;
+    
+    while (elapsed_ticks < ticks_to_wait) {
+        while (tick == start_tick + elapsed_ticks) {};
+        elapsed_ticks++;
+    }    
 }

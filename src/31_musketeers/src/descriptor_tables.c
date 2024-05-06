@@ -9,13 +9,11 @@ static void idt_set_gate(uint8_t,uint32_t,uint16_t,uint8_t);
 idt_entry_t idt_entries[256];
 idt_ptr_t   idt_ptr;
 
-
-
-
 void init_descriptor_tables()
 {
   init_gdt();
   init_idt();
+  init_irq();
 }
 
 static void init_idt()
