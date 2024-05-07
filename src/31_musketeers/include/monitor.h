@@ -24,4 +24,6 @@ int32_t findstrlength(char *str);
 void move_cursor();
 
 void scroll();
+
+void backspace();
 #endif // MONITOR_H

@@ -176,3 +176,9 @@ void scroll()
        cursor_y = 24;
    }
 }
+
+
+void backspace(){
+    cursor_x--;
+    move_cursor();
+}

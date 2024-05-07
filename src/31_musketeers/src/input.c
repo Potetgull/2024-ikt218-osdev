@@ -1,6 +1,7 @@
 #include "input.h"
 #include "libc/stdint.h"
 #include <libc/stdbool.h>
+#include <monitor.h>
 
 
 bool capsEnabled = false;
@@ -19,16 +20,19 @@ const char small_ascii[] = {'?', '?', '1', '2', '3', '4', '5', '6',
 
 char scancode_to_ascii(unsigned char* scan_code) {
     unsigned char a = *scan_code;
+    char d[2] = {'\0', '\0'};
+
     switch (a){
         case 1:     //ESC
             return 0;    
         case 14:    // BACK
-		    //backspace();
+		    backspace();
 		    return 0; 
         case 15:
             return 0;    
         case 28:    // ENTER
-		    return 2;
+            d[0] = '\n';
+            return d[0];
         case 29:    //CTRL
             return 0;    
         case 42:    // LSHIFT
@@ -40,7 +44,8 @@ char scancode_to_ascii(unsigned char* scan_code) {
         case 56:   
             return 0;
         case 57:       //SPACE
-            return 3;
+            d[0] = 32;
+            return d[0];
         case 58:   
             capsEnabled = !capsEnabled;
             return 0; 
@@ -65,7 +70,8 @@ char scancode_to_ascii(unsigned char* scan_code) {
                 } else {
                     c = small_ascii[b];
                 }
-                return c;
+                d[0] = c;
+                return d[0];
             }else
             {
                 return 0;

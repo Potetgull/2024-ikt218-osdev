@@ -16,15 +16,15 @@ struct multiboot_info {
 };
 
 
-
 int kernel_main();
 
 void keyboard_handler(registers_t regs){
             // Read from keyboard
         unsigned char scan_code = inb(0x60);
-        char f = scancode_to_ascii(&scan_code);
+        char f[2] = {'\0', '\0'};
+        f[0] = scancode_to_ascii(&scan_code);
         
-        monitor_write(&f);
+        monitor_write(f);
 
         // Disable
         asm volatile("cli");
@@ -38,7 +38,9 @@ int main(uint32_t magic, struct multiboot_info* mb_info_addr) {
     monitor_write("Hello, world!");
     asm volatile("sti");
 
-    init_timer(1000); // Initialise timer to 50Hz
+    init_timer(1000); // Initialise timer to 1000Hz
+
+    //sleep_busy(1000);
 
     asm volatile ("int $0x0");
     asm volatile ("int $0x1");
