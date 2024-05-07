@@ -48,7 +48,7 @@ void irq_handler(registers_t regs)
    // Send reset signal to master. (As well as slave, if necessary).
    outb(0x20, 0x20);
 
-   if (regs.int_no >= 32)
+   if (regs.int_no >= 32)//interrupts above and including 32 are IRQs. 
    {
     isr_t handler = irq_handlers[regs.int_no].handler;
     handler(&regs, NULL);

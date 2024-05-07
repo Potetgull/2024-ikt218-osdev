@@ -20,18 +20,18 @@ const char small_ascii[] = {'?', '?', '1', '2', '3', '4', '5', '6',
 
 char scancode_to_ascii(unsigned char* scan_code) {
     unsigned char a = *scan_code;
-    char d[2] = {'\0', '\0'};
+    char d[2] = {'\0', '\0'};   //inits array with \0 as end of 'string'
 
     switch (a){
         case 1:     //ESC
             return 0;    
         case 14:    // BACK
-		    backspace();
+		    backspace();        //runs the backspace command, which decreases the cursor x by one. Does not remove the char existing in that spot.
 		    return 0; 
         case 15:
             return 0;    
         case 28:    // ENTER
-            d[0] = '\n';
+            d[0] = '\n';        //sets the first element of the array to what we desire. Here its newline.
             return d[0];
         case 29:    //CTRL
             return 0;    
@@ -44,7 +44,7 @@ char scancode_to_ascii(unsigned char* scan_code) {
         case 56:   
             return 0;
         case 57:       //SPACE
-            d[0] = 32;
+            d[0] = 32;      //Sets the first element in the array to int 32, which in ascii is a space. ' '.
             return d[0];
         case 58:   
             capsEnabled = !capsEnabled;
@@ -70,7 +70,7 @@ char scancode_to_ascii(unsigned char* scan_code) {
                 } else {
                     c = small_ascii[b];
                 }
-                d[0] = c;
+                d[0] = c;               //Sets the first element of the array to the char picked from the lookup table. This is only done to ensure no residual data.
                 return d[0];
             }else
             {
