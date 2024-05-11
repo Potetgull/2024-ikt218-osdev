@@ -23,7 +23,7 @@ uint16_t inw(uint16_t port)
 
 
 // Implementation of strlen function
-size_t strlen(const char* str) {
+size_t strlen2(const char* str) {
     size_t len = 0;
     while (str[len] != '\0') {
         len++;
@@ -32,7 +32,7 @@ size_t strlen(const char* str) {
 }
 
 // Implementation of memset function
-void* memset(void* ptr, int value, size_t num) {
+void* memset2(void* ptr, int value, size_t num) {
     unsigned char* p = ptr;
     while (num-- > 0) {
         *p++ = (unsigned char)value;
@@ -41,7 +41,7 @@ void* memset(void* ptr, int value, size_t num) {
 }
 
 // Implementation of memcpy function
-void* memcpy(void* dest, const void* src, size_t num) {
+void* memcpy2(void* dest, const void* src, size_t num) {
     unsigned char* d = dest;
     const unsigned char* s = src;
     while (num-- > 0) {

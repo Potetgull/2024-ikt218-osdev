@@ -26,4 +26,5 @@ void move_cursor();
 void scroll();
 
 void backspace();
+int logtimertext(int counter);
 #endif // MONITOR_H

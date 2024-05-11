@@ -1,19 +1,16 @@
-#include "timer.h"
+#include <kernel/pit.h>
 #include "isr.h"
 #include "monitor.h"
 #include "libc/stddef.h"
 
-uint32_t tick = 0;
+static uint32_t tick = 0;
 
 static void timer_callback(registers_t regs)
 {
    tick++;
-   //monitor_write("Tick: ");
-   //monitor_write_dec(tick);
-   //monitor_write("\n");
 }
 
-void init_timer(uint32_t frequency)
+void init_pit()
 {
    // Firstly, register our timer callback.
    register_irq_handler(IRQ0, timer_callback, NULL);
@@ -21,7 +18,9 @@ void init_timer(uint32_t frequency)
    // The value we send to the PIT is the value to divide it's input clock
    // (1193180 Hz) by, to get our required frequency. Important to note is
    // that the divisor must be small enough to fit into 16-bits.
-   uint32_t divisor = (uint8_t)1193180 / frequency;
+
+
+   uint32_t divisor = (uint8_t)1193180 / TARGET_FREQUENCY;
 
    // Send the command byte.
    outb(0x43, 0x36);
@@ -35,6 +34,20 @@ void init_timer(uint32_t frequency)
    outb(0x40, h);
 }
 
+
+void sleep_interrupt(uint32_t milliseconds){
+    uint32_t current_tick = tick;
+    uint32_t ticks_to_wait = milliseconds * TICKS_PER_MS;
+    uint32_t end_ticks = current_tick + ticks_to_wait;
+
+    while (current_tick < end_ticks) {
+        // Enable interrupts (sti)
+        asm volatile("sti");
+        // Halt the CPU until the next interrupt (hlt)
+        asm volatile("hlt");
+        current_tick = tick;
+    }
+}
 
 void sleep_busy(uint32_t milliseconds){
     uint32_t start_tick = tick;

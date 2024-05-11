@@ -4,9 +4,11 @@
 #include <multiboot2.h>
 #include <descriptor_tables.h>
 #include <monitor.h>
-#include <timer.h>
+#include <kernel/pit.h>
 #include "isr.h"
 #include "input.h"
+#include "kernel/memory.h"
+#include "kernel/pit.h"
 
 
 struct multiboot_info {
@@ -15,6 +17,7 @@ struct multiboot_info {
     struct multiboot_tag *first;
 };
 
+extern uint32_t end; // This is defined in arch/i386/linker.ld
 
 int kernel_main();
 
@@ -31,15 +34,30 @@ void keyboard_handler(registers_t regs){
         asm volatile("cli");
 }
 
+
 int main(uint32_t magic, struct multiboot_info* mb_info_addr) {
+
     
+    monitor_clear();                //clears the terminal monitor
+
     init_descriptor_tables();       //runs init gdt, init idt and init irq
 
-    monitor_clear();                //clears the terminal monitor
+    // Initialize the kernel's memory manager using the end address of the kernel.
+    init_kernel_memory(&end); // <------ THIS IS PART OF THE ASSIGNMENT
+
+    // Initialize paging for memory management.
+    init_paging(); // <------ THIS IS PART OF THE ASSIGNMENT
+
+    // Print memory information.
+    print_memory_layout(); // <------ THIS IS PART OF THE ASSIGNMENT
+
+		// Initialize PIT
+    init_pit(); // <------ THIS IS PART OF THE ASSIGNMENT
+
     monitor_write("Hello, world!"); //prints string "Hello, world"
     asm volatile("sti");            //Enables interrupts
 
-    init_timer(1000);               // Initialise timer to 1000Hz
+    init_pit(1000);               // Initialise timer to 1000Hz
 
 
     asm volatile ("int $0x0");      //Throws interrupt 0-2

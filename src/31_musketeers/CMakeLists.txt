@@ -70,6 +70,13 @@ add_executable(uiaos-kernel
 	src/common.c
 	src/timer.c
 	src/input.c
+	src/memory/malloc.c
+	src/memory/memory.c
+	src/memory/memutils.c
+	src/libc/panic.c
+	src/libc/stdio.c
+	src/libc/string.c
+	src/libc/system.c
 )
 
 # Include directories for the kernel target
