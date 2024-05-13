@@ -11,6 +11,7 @@ extern "C"{
     #include "isr.h"
     #include <kernel/memory.h>
     #include <kernel/pit.h>
+    #include "songstuff/song.h"
 }
 
 
@@ -43,6 +44,7 @@ void operator delete[](void* ptr, size_t size) noexcept {
     free(ptr);
 }
 
+
 extern "C" int kernel_main(void);
 int kernel_main(){
 
@@ -54,15 +56,33 @@ int kernel_main(){
     char* memory4 = new char[1000]();
     int counter = 0;
 
-while(true){
-        printf("[%d]: Sleeping with busy-waiting (HIGH CPU).\n", counter);
-        sleep_busy(100);
-        printf("[%d]: Slept using busy-waiting.\n", counter++);
 
-        printf("[%d]: Sleeping with interrupts (LOW CPU).\n", counter);
-        sleep_interrupt(100);
-        printf("[%d]: Slept using interrupts.\n", counter++);
- };
-    
+
+// How to play music
+Song* songs[] = {
+	new Song({music_1, sizeof(music_1) / sizeof(Note)}),
+    new Song({starwars_theme, sizeof(starwars_theme)  / sizeof(Note)}),
+    new Song({battlefield_1942_theme, sizeof(battlefield_1942_theme)  / sizeof(Note)})
+};
+uint32_t n_songs = sizeof(songs) / sizeof(Song*);
+
+SongPlayer* player = create_song_player();
+
+
+while(true){
+  for(uint32_t i =0; i < n_songs; i++){
+      printf("Playing Song...\n");
+      player->play_song(songs[i]);
+      printf("Finished playing the song.\n");
+  }
+
+    printf("[%d]: Sleeping with busy-waiting (HIGH CPU).\n", counter);
+    sleep_busy(10000);
+    printf("[%d]: Slept using busy-waiting.\n", counter++);
+
+    printf("[%d]: Sleeping with interrupts (LOW CPU).\n", counter);
+    sleep_interrupt(10000);
+    printf("[%d]: Slept using interrupts.\n", counter++);
+  }
 
 }

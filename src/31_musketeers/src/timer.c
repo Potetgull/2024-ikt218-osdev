@@ -2,6 +2,7 @@
 #include "isr.h"
 #include "monitor.h"
 #include "libc/stddef.h"
+#include "libc/system.h"
 
 static uint32_t tick = 0;
 
@@ -20,7 +21,7 @@ void init_pit()
    // that the divisor must be small enough to fit into 16-bits.
 
 
-   uint32_t divisor = (uint8_t)1193180 / TARGET_FREQUENCY;
+   uint32_t divisor = (uint16_t)DIVIDER;
 
    // Send the command byte.
    outb(0x43, 0x36);
@@ -46,6 +47,7 @@ void sleep_interrupt(uint32_t milliseconds){
         // Halt the CPU until the next interrupt (hlt)
         asm volatile("hlt");
         current_tick = tick;
+        //printf("-%d", current_tick);
     }
 }
 

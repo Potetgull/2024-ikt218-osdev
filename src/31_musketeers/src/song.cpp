@@ -1,6 +1,9 @@
-#include "songstuff/song.h"
-#include <kernel/pit.h>
-#include <kernel/common.h>
+extern "C"{
+    #include "songstuff/song.h"
+    #include <kernel/pit.h>
+    #include <common.h>
+}
+
 
 void enable_speaker(){
     // Read the current state of the PC speaker control register
@@ -26,22 +29,6 @@ void disable_speaker() {
     outb(PC_SPEAKER_PORT, speaker_state & 0xFC);
 }
 
-
-void play_song_impl(Song *song) {
-    enable_speaker();
-    for (uint32_t i = 0; i < song->length; i++) {
-        Note* note = &song->notes[i];
-        //printf("Note: %d, Freq=%d, Sleep=%d\n", i, note->frequency, note->duration);
-        play_sound(note->frequency);
-        sleep_interrupt(note->duration);
-        disable_speaker();
-    }
-}
-
-void play_song(Song *song) {
-    play_song_impl(song);
-}
-
 void play_sound(uint32_t frequency) {
     if (frequency == 0) {
         return;
@@ -53,6 +40,22 @@ void play_sound(uint32_t frequency) {
     outb(PIT_CMD_PORT, 0b10110110); 
     outb(PIT_CHANNEL2_PORT, (uint8_t)(divisor & 0xFF));
     outb(PIT_CHANNEL2_PORT, (uint8_t)(divisor >> 8));
+}
+
+
+void play_song_impl(Song *song) {
+    enable_speaker();
+    for (uint32_t i = 0; i < song->length; i++) {
+        Note* note = &song->notes[i];
+        printf("Note: %d, Freq=%d, Sleep=%d\n", i, note->frequency, note->duration);
+        play_sound(note->frequency);
+        sleep_interrupt(note->duration);
+        disable_speaker();
+    }
+}
+
+void play_song(Song *song) {
+    play_song_impl(song);
 }
 
 
