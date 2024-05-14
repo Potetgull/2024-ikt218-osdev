@@ -17,9 +17,9 @@ void enable_speaker(){
             1: Data is passed to the speaker
     */
     // Check if bits 0 and 1 are not set (0 means that the speaker is disabled)
-    if (speaker_state != (speaker_state | 3)) {
+    if (speaker_state != (speaker_state | 0x03)) {
         // If bits 0 and 1 are not set, enable the speaker by setting bits 0 and 1 to 1
-        outb(PC_SPEAKER_PORT, speaker_state | 3);
+        outb(PC_SPEAKER_PORT, speaker_state | 0x03);
     }
 }
 
@@ -50,8 +50,9 @@ void play_song_impl(Song *song) {
         printf("Note: %d, Freq=%d, Sleep=%d\n", i, note->frequency, note->duration);
         play_sound(note->frequency);
         sleep_interrupt(note->duration);
-        disable_speaker();
     }
+    disable_speaker();
+
 }
 
 void play_song(Song *song) {
